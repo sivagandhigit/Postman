@@ -1,0 +1,560 @@
+{
+	"info": {
+		"_postman_id": "d0894e34-ce48-4ed4-bc47-3286c0efc515",
+		"name": "Trello",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "139c74b8-4980-4039-ac36-02775c29bc03",
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"boardid\", response.id);\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.eq(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Board created Successfully\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.name).to.eq(pm.environment.get(\"BoardName\"))\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Board not closed\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.closed).to.eq(false)\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Board created Successfully\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.prefs.permissionLevel).to.eq(\"private\")\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5d302080-3f47-45ea-9db1-0db3747415c1",
+						"exec": [
+							"pm.environment.set(\"BoardName\",\"Board Name\" + Math.random() *10 )\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://trello.com/1/boards?name={{BoardName}}&key={{trellokey}}&token={{trellotoken}}",
+					"protocol": "https",
+					"host": [
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{BoardName}}"
+						},
+						{
+							"key": "key",
+							"value": "{{trellokey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trellotoken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Board",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e2537f3a-7cd6-461e-8a4d-3851451c3644",
+						"exec": [
+							"pm.environment.set(\"BoardName\",pm.environment.get(\"BoardName\")+\" Updated\")"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "8275fd9e-71cc-443d-80fd-6de3cc586171",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/:id?name={{BoardName}}&key=e00a35e8635247e51524bd8ab8b182a6&token=46556bbde2d3e206f829c83009d6953636d72e827b8b5acce2c59150f17977d8",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						":id"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{BoardName}}"
+						},
+						{
+							"key": "key",
+							"value": "e00a35e8635247e51524bd8ab8b182a6"
+						},
+						{
+							"key": "token",
+							"value": "46556bbde2d3e206f829c83009d6953636d72e827b8b5acce2c59150f17977d8"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{boardid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add TODO List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a324d0c8-8664-4e3b-b0f6-21090b637c04",
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"TODOListid\", response.id);\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.eq(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Board created Successfully\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.name).to.eq(pm.environment.get(\"ListName\"))\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Board not closed\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.closed).to.eq(false)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c99ca982-ff39-4ffa-8195-4f8fb67c3a12",
+						"exec": [
+							"pm.environment.set(\"ListName\", \"TODOList\" + parseInt(Math.random()));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/lists?name={{ListName}}&idBoard={{boardid}}&key={{trellokey}}&token={{trellotoken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "{{ListName}}"
+						},
+						{
+							"key": "idBoard",
+							"value": "{{boardid}}"
+						},
+						{
+							"key": "key",
+							"value": "{{trellokey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trellotoken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Done List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cae9a6f3-0aa1-49e0-a01c-1d682f9a9f45",
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"DoneListid\", response.id);\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.eq(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Board created Successfully\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.name).to.eq(pm.environment.get(\"DoneListName\"))\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Board not closed\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.closed).to.eq(false)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a8c09645-6b59-4ed3-b881-f60c6d6e1132",
+						"exec": [
+							"pm.environment.set(\"DoneListName\", \"Done List\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/lists?name={{DoneListName}}&idBoard={{boardid}}&key={{trellokey}}&token={{trellotoken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "name",
+							"value": "{{DoneListName}}"
+						},
+						{
+							"key": "idBoard",
+							"value": "{{boardid}}"
+						},
+						{
+							"key": "key",
+							"value": "{{trellokey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trellotoken}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add TODO Card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cae9a6f3-0aa1-49e0-a01c-1d682f9a9f45",
+						"exec": [
+							"let response = pm.response.json();\r",
+							"pm.environment.set(\"TODOCard\", response.id);\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.eq(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"created created Successfully\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.name).to.eq(pm.environment.get(\"cardName\"))\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card not closed\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.closed).to.eq(false)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "abc67f16-1b73-4c27-9af1-296162771423",
+						"exec": [
+							"pm.environment.set(\"cardName\", \"TODO Card Name\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/cards?idList={{TODOListid}}&key={{trellokey}}&token={{trellotoken}}&name={{cardName}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "idList",
+							"value": "{{TODOListid}}"
+						},
+						{
+							"key": "key",
+							"value": "{{trellokey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trellotoken}}"
+						},
+						{
+							"key": "name",
+							"value": "{{cardName}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update - Move Card to Done List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cae9a6f3-0aa1-49e0-a01c-1d682f9a9f45",
+						"exec": [
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.eq(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"created created Successfully\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.idList).to.eq(pm.environment.get(\"DoneListid\"))\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Card not closed\", function () {\r",
+							"    var jsonData = pm.response.json()\r",
+							"    pm.expect(jsonData.closed).to.eq(false)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/cards/:id?idList={{DoneListid}}&key={{trellokey}}&token={{trellotoken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards",
+						":id"
+					],
+					"query": [
+						{
+							"key": "idList",
+							"value": "{{DoneListid}}"
+						},
+						{
+							"key": "key",
+							"value": "{{trellokey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trellotoken}}"
+						},
+						{
+							"key": "name",
+							"value": "Test TODO Card",
+							"disabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{TODOCard}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Board",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "139c74b8-4980-4039-ac36-02775c29bc03",
+						"exec": [
+							"pm.environment.unset(\"boardid\")\r",
+							"pm.environment.unset(\"BoardName\")\r",
+							"pm.environment.unset(\"TODOListid\")\r",
+							"pm.environment.unset(\"DoneListid\")\r",
+							"pm.environment.unset(\"TODOCard\")\r",
+							"pm.environment.unset(\"ListName\")\r",
+							"pm.environment.unset(\"DoneListName\")\r",
+							"pm.environment.unset(\"cardName\")\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.eq(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/:id?&key={{trellokey}}&token={{trellotoken}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						":id"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "key",
+							"value": "{{trellokey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trellotoken}}"
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{boardid}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"id": "8334e5e4-15a4-43f2-b915-0ac1f700e1c5",
+			"key": "DoneListName",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "aa1d450b-209f-4635-b22a-70edb39a8074",
+			"key": "cardName",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
