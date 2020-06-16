@@ -1,0 +1,95 @@
+{
+	"info": {
+		"_postman_id": "10807959-eb12-447a-94bc-55ee5677d06e",
+		"name": "PostmanAPI - Data Set",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Collection API JSON",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "614c6282-93b8-4c52-9109-e73c2087ca3c",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "1bfd8817-1468-40ef-84cc-a989b90eba0b",
+						"exec": [
+							"const jasonData = pm.response.json()\r",
+							"console.log(jasonData)\r",
+							"pm.test(\"Check the id \", function(){\r",
+							"    pm.expect(jasonData.collection.info._postman_id).to.include(pm.variables.get(\"id\").substring(9))\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.getpostman.com/collections/{{id}}?apikey={{postmanapikey}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"getpostman",
+						"com"
+					],
+					"path": [
+						"collections",
+						"{{id}}"
+					],
+					"query": [
+						{
+							"key": "apikey",
+							"value": "{{postmanapikey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "30d411ef-9c92-4baa-a79a-35bd2ddd043d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "672b5078-0265-4b7e-a9c1-d9f5f47ce6e6",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "9545d3de-cef5-41e2-b375-e309bf562592",
+			"key": "id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
